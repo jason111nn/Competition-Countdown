@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第 56 屆全國技能競賽分區技能競賽 倒數計時器</title>
+    <meta name="description" content="第 56 屆全國技能競賽 - 北中南分區技能競賽非官方倒數計時器。純粹倒數距離比賽開始的剩餘時間。">
+    <meta name="keywords" content="全國技能競賽, 分區技能競賽, 技能競賽, 倒數計時, 青年組, 青少年組, 競賽日期">
+    <meta http-equiv="Content-Language" content="zh-TW">
+    <meta name="author" content="Jason111nn">
+    <meta name="copyright" content="Copyright © 2025 Jason111nn">
+    <link rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">
+    <meta property="og:title" content="第 56 屆全國技能競賽分區競賽：倒數計時！">
+    <meta property="og:description" content="非官方倒數頁面，純粹追蹤距離比賽開始的剩餘時間。">
+    <meta property="og:type" content="website">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        :root {
+            --color-primary: #1de9b6;
+            --color-secondary: #ff4081;
+            --color-accent: #651fff;
+            --text-dark: #333;
+            --text-light: #fff;
+        }
+
+        body {
+            width: 100vw;
+            min-height: 100vh;
+            margin: 0;
+            overflow-x: hidden;
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: space-evenly;
+            background-image: url('https://ws.wda.gov.tw/001/Upload/331/relpic/10243/185640/a8144195-5b0d-4c72-ad59-1f90e7d559b2.jpg');
+            background-size: cover;
+            background-position: center center;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(16px);
+            z-index: -2;
+        }
+
+        #copyright-footer {
+            position: fixed;
+            left: 20px;
+            bottom: 15px;
+            z-index: 0;
+            color: #000;
+            font-size: 0.9rem;
+            opacity: 0.6;
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            text-align: left;
+        }
+
+
+        .reciprocal-box {
+            z-index: 2;
+            text-align: left;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 1.5vw;
+            padding: 4vh 4vw;
+            box-shadow: 0 1vh 2vw rgba(0, 0, 0, 0.1);
+            max-width: 40vw;
+            color: var(--text-dark);
+        }
+
+        .reciprocal-box h1 {
+            font-size: 2vw;
+            margin: 0;
+            line-height: 1.2;
+        }
+
+        .reciprocal-day {
+            color: var(--color-accent);
+            font-size: 5.5vw;
+            font-weight: 900;
+            display: block;
+            margin: 1vh 0;
+        }
+
+        .reciprocal-time {
+            font-family: monospace;
+            font-size: 2.5vw;
+            color: var(--color-primary);
+            font-weight: bold;
+            display: block;
+        }
+
+        .poster-container {
+            border-radius: 1.5vw;
+            box-shadow: 0 1vw 3vw rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .poster-img {
+            max-height: calc(100vh - 5vh);
+            max-width: 45vw;
+            object-fit: contain;
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+
+            body::before {
+                display: none;
+            }
+
+            body {
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                background-color: transparent;
+                background-image: none;
+            }
+
+            .poster-container {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                z-index: -1;
+                overflow: hidden;
+
+                filter: none;
+                border-radius: 0;
+                box-shadow: none;
+            }
+
+            .poster-img {
+                min-width: 100vw;
+                min-height: 100vh;
+                object-fit: cover;
+                display: block !important;
+                z-index: auto;
+                filter: none;
+            }
+
+            .reciprocal-box {
+                width: 85vw !important;
+                max-width: none;
+                padding: 30px 20px;
+                text-align: center;
+                z-index: 2;
+                background: rgba(255, 255, 255, 0.92);
+                backdrop-filter: none;
+                border-radius: 20px;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+                color: #000;
+            }
+
+            .reciprocal-box h1 {
+                font-size: 1.4rem;
+                margin-bottom: 5px;
+                font-weight: 700;
+                color: #444;
+            }
+
+            .reciprocal-day {
+                font-size: 5.5rem;
+                font-weight: 900;
+                color: var(--color-accent);
+                line-height: 1.1;
+                margin: 5px 0;
+                text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.05);
+            }
+
+            .reciprocal-time {
+                font-family: monospace;
+                font-size: 2rem;
+                font-weight: 800;
+                color: var(--color-primary);
+                letter-spacing: 1px;
+                margin-top: 10px;
+            }
+
+            #copyright-footer {
+                color: #fff;
+                text-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
+                opacity: 0.8;
+            }
+
+            @media (max-width: 350px) {
+                .reciprocal-box {
+                    width: 90vw !important;
+                    max-width: none;
+                    padding: 3vh 3vw;
+                }
+            }
+        }
+
+        @media (max-width: 350px) {
+            .reciprocal-box {
+                width: 90vw;
+                padding: 3vh 3vw;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="reciprocal-box">
+        <h1>
+            距離比賽還有<br>
+            <span class="reciprocal-day" id="days">0</span> 天
+        </h1>
+        <h2 class="reciprocal-time" id="timer">
+            00:00:00
+        </h2>
+    </div>
+
+    <div class="poster-container">
+        <img class="poster-img" src="https://ws.wda.gov.tw/001/Upload/331/relpic/10243/185640/a8144195-5b0d-4c72-ad59-1f90e7d559b2.jpg" alt="比賽宣傳海報">
+    </div>
+    <div id="copyright-footer">
+        Copyright © 2025 Jason111nn
+    </div>
+
+    <script>
+        const targetDate = new Date('2026-03-26T00:00:00').getTime();
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = targetDate - now;
+
+            if (distance < 0) {
+                document.getElementById("days").innerText = "0";
+                document.getElementById("timer").innerText = "比賽已開始";
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementsByTagName("data").innerTExt
+            document.getElementById("days").innerText = days;
+            document.getElementById("timer").innerText =
+                (hours < 10 ? "0" + hours : hours) + ":" +
+                (minutes < 10 ? "0" + minutes : minutes) + ":" +
+                (seconds < 10 ? "0" + seconds : seconds);
+        }
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+    </script>
+</body>
+
+</html>
